@@ -1,0 +1,29 @@
+# --- NYX CORE ---
+# Block all temporary build outputs
+nyx_out.lua
+output.lua
+build/
+bin/
+
+# --- LUA / TERMUX ---
+# Block Lua history and local crash logs
+.lua_history
+luac.out
+*.log
+
+# --- SYSTEM / OS ---
+# Block Android/Samsung specific metadata
+.DS_Store
+.thumbnails/
+.ExternalStorage/
+
+# --- SENSITIVE DATA ---
+# Block your private VM Opcode maps or encryption keys
+keys/
+*.key
+config.local.lua
+
+# --- GITBOOK / DOCS ---
+# Only ignore local node modules if you use GitBook CLI
+node_modules/
+.grunt/
