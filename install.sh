@@ -1,12 +1,11 @@
 #!/bin/bash
 
-# NYX OBFUSCATOR
+# NYX_SETUP_PROTOCOL
 C_CYAN='\033[0;36m'
 C_GREEN='\033[0;32m'
-C_RED='\033[0;31m'
 C_NC='\033[0m'
 
-function banner() {
+function nyx_logo() {
     clear
     echo -e "${C_CYAN}"
     cat << "EOF"
@@ -48,26 +47,21 @@ EOF
     echo -e "${C_NC}"
 }
 
-if [ -z "$1" ]; then
-    banner
-    echo -e "${C_RED}[!] NYX: NO INPUT TARGET${C_NC}"
-    exit 1
+nyx_logo
+echo -e "${C_GREEN}[*] INITIALIZING NYX ENVIRONMENT...${C_NC}"
+
+# 1. Permission Sync
+chmod +x cli.lua
+if [ -f "nyx.sh" ]; then chmod +x nyx.sh; fi
+
+# 2. Structure Creation
+mkdir -p build internal logs
+
+# 3. Dependency Check (Non-rooted Termux)
+if ! command -v lua5.1 &> /dev/null; then
+    echo "[!] WARNING: lua5.1 NOT DETECTED. INSTALLING..."
+    pkg install lua51 -y
 fi
 
-banner
-echo -e "${C_GREEN}[*] NYX SYSTEM INITIALIZED...${C_NC}"
-
-# Internal Pipeline
-echo -e "[>] SCRUBBING SOURCE..."
-# lua5.1 nyx_lexer.lua "$1"
-sleep 0.5
-
-echo -e "[>] GENERATING STATE-MACHINE (NYX-FLATTEN)..."
-# lua5.1 nyx_flatten.lua
-sleep 0.5
-
-echo -e "[>] VIRTUALIZING OPCODES (NYX-VM)..."
-# lua5.1 nyx_vm.lua
-sleep 0.5
-
-echo -e "\n${C_GREEN}[SUCCESS] NYX_BUILD_COMPLETE -> output.lua${C_NC}"
+echo -e "\n${C_GREEN}[+] SETUP COMPLETE.${C_NC}"
+echo "[>] USE: lua cli.lua <target.lua>"
