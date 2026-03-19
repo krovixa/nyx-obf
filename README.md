@@ -8,6 +8,7 @@ Extreme-measure Lua virtualization engine for Discord, Websites (if sure), and T
 
 ```bash
 npm install -g nyx-obf
-# OR
-git clone [https://github.com/krovixa/nyx-obf](https://github.com/krovixa/nyx-obf)
+```
+```bash
+git clone https://github.com/krovixa/nyx-obf
 bash setup.sh
