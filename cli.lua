@@ -1,25 +1,24 @@
-local function get_device_info()
-    local handle = io.popen("getprop ro.product.model")
-    local result = handle:read("*a")
-    handle:close()
-    return result:gsub("%s+", "") or "GENERIC_HOST"
-end
+local z = require("z")
 
-local SYSTEM = {
-    ADMIN = "krovixa",
-    DEVICE = get_device_info(),
-    VERSION = "1.0.4"
+-- Constants for the math test
+local _c = { "print", 0, 5 }
+
+local _b = {
+    {0xC3, 1, 1}, -- Reg 1 = print
+    {0xB1, 2, 2}, -- Reg 2 = 0
+    {0xB1, 3, 3}, -- Reg 3 = 5
+    
+    -- PART 1: 0 * 5 (Mode 3 is Multiply)
+    {0xE5, 3, 2, 3, "var_mul"}, -- result in Reg 2
+    
+    -- PART 2: 5 + 0 (Mode 1 is Add)
+    {0xB1, 4, 3}, -- Reg 4 = 5
+    {0xB1, 5, 2}, -- Reg 5 = 0
+    {0xE5, 1, 4, 5, "var_add"}, -- result in Reg 4
+    
+    -- Final Output (Calling print with the results)
+    {0xD4, 1, 1}, 
+    {0xF6, 0, 0}
 }
 
-local function run()
-    local args = {...}
-    if not args[1] then return end
-
-    print(string.format("[*] NYX_SESSION: %s @ %s", SYSTEM.ADMIN, SYSTEM.DEVICE))
-    
-    -- Calling the VM (z.lua)
-    local z = require("z")
-    z.execute()
-end
-
-run()
+z.execute(_b, _c)
